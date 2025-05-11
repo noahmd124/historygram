@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Historygram</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -16,12 +17,6 @@
       display: flex;
       background-color: #fafafa;
       color: #262626;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.dark-mode {
-      background-color: #121212;
-      color: #f5f5f5;
     }
 
     .sidebar {
@@ -51,12 +46,6 @@
       margin-right: 10px;
     }
 
-    .toggle-dark {
-      margin-top: 20px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
     .main-content {
       margin-left: 250px;
       width: 100%;
@@ -76,7 +65,6 @@
       text-align: center;
       width: 80px;
       flex: none;
-      cursor: pointer;
     }
 
     .story img {
@@ -111,6 +99,10 @@
       margin-right: 10px;
     }
 
+    .post-image {
+      width: 100%;
+    }
+
     .post-image img {
       width: 100%;
     }
@@ -129,44 +121,94 @@
       padding: 0 10px 10px;
     }
 
-    .comments {
-      padding: 0 10px 10px;
+    .post-caption strong {
+      margin-right: 5px;
     }
 
-    .comments input {
-      width: 100%;
-      padding: 5px;
-      margin-top: 5px;
-    }
-
-    .follow-btn {
-      cursor: pointer;
-      color: #0095f6;
-      font-weight: bold;
-    }
-
-    .notifications {
+    /* Modal Styles */
+    .modal {
+      display: none;
       position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #fff;
-      border: 1px solid #dbdbdb;
-      padding: 10px;
-      display: none;
-    }
-
-    #search-bar {
-      margin: 20px 0;
+      top: 0;
+      left: 0;
       width: 100%;
-      padding: 8px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
     }
 
-    .hidden {
-      display: none;
+    .modal-content {
+      display: flex;
+      background: white;
+      max-width: 900px;
+      width: 100%;
+      max-height: 80%;
+    }
+
+    .modal-content img {
+      width: 50%;
+      height: auto;
+    }
+
+    .modal-details {
+      width: 50%;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-details h2 {
+      margin-bottom: 15px;
+    }
+
+    .modal-details p {
+      margin-bottom: 10px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 25px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Back Button Styles */
+    .back-btn {
+      margin-top: 20px;
+      background-color: #007bff;
+      padding: 10px 20px;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .back-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Dark Mode */
+    .dark-mode {
+      background-color: #333;
+      color: #f0f0f0;
+    }
+
+    .dark-mode .sidebar {
+      background-color: #222;
+    }
+
+    .dark-mode .post {
+      background-color: #444;
+      color: #f0f0f0;
     }
   </style>
 </head>
 <body>
+
   <div class="sidebar">
     <h1>Historygram</h1>
     <a href="#"><i class="fas fa-home"></i>Home</a>
@@ -175,107 +217,90 @@
     <a href="#"><i class="fas fa-video"></i>Reels</a>
     <a href="#"><i class="fas fa-comment-dots"></i>Messages</a>
     <a href="#"><i class="fas fa-bell"></i>Notifications</a>
+    <a href="#"><i class="fas fa-plus-square"></i>Create</a>
     <a href="#"><i class="fas fa-user"></i>Profile</a>
-    <div class="toggle-dark">🌙 Toggle Dark Mode</div>
+    <button id="darkModeToggle">🌙 Dark Mode</button>
   </div>
 
   <div class="main-content">
-    <input type="text" id="search-bar" placeholder="Search users...">
-
+    <!-- Stories -->
     <div class="stories">
-      <div class="story" onclick="alert('Viewing story: Cleopatra')">
-        <img src="https://picsum.photos/60?1" alt="">
-        <span>Cleopatra</span>
+      <div class="story">
+        <img src="https://picsum.photos/60?1" alt="" onclick="viewProfile('Cleopatra')">
+        <span onclick="viewProfile('Cleopatra')">Cleopatra</span>
       </div>
-      <div class="story" onclick="alert('Viewing story: MLK Jr')">
-        <img src="https://picsum.photos/60?2" alt="">
-        <span>MLK Jr</span>
+      <div class="story">
+        <img src="https://picsum.photos/60?2" alt="" onclick="viewProfile('MLK Jr.')">
+        <span onclick="viewProfile('MLK Jr.')">MLK Jr.</span>
       </div>
-      <div class="story" onclick="alert('Viewing story: William')">
-        <img src="https://picsum.photos/60?3" alt="">
-        <span>W. Conqueror</span>
+      <div class="story">
+        <img src="https://picsum.photos/60?3" alt="" onclick="viewProfile('W. Conqueror')">
+        <span onclick="viewProfile('W. Conqueror')">W. Conqueror</span>
+      </div>
+      <div class="story">
+        <img src="https://picsum.photos/60?4" alt="" onclick="viewProfile('Churchill')">
+        <span onclick="viewProfile('Churchill')">Churchill</span>
       </div>
     </div>
 
-    <div class="post" data-user="cleopatra_queen">
+    <!-- Post -->
+    <div class="post" onclick="openModal('post1')">
       <div class="post-header">
         <img src="https://picsum.photos/40?5" alt="">
-        <span><strong>cleopatra_queen</strong> <span class="follow-btn">Follow</span></span>
+        <span><strong onclick="viewProfile('cleopatra_queen')">cleopatra_queen</strong></span>
       </div>
       <div class="post-image">
         <img src="https://picsum.photos/600/400?5" alt="">
       </div>
       <div class="post-actions">
-        <i class="far fa-heart" onclick="toggleLike(this)"></i>
+        <i class="far fa-heart"></i>
         <i class="far fa-comment"></i>
         <i class="far fa-paper-plane"></i>
       </div>
       <div class="post-caption">
         <strong>cleopatra_queen</strong> Ruling in style from the Nile 💅👑
       </div>
-      <div class="comments">
-        <input type="text" placeholder="Add a comment..." onkeypress="postComment(event, this)">
-        <div class="comment-list"></div>
-      </div>
     </div>
 
-    <div id="notifications" class="notifications"></div>
+    <!-- Modal for image view -->
+    <div id="imageModal" class="modal">
+      <div class="modal-content">
+        <img src="https://picsum.photos/600/400?5" alt="">
+        <div class="modal-details">
+          <h2>Ruling in style from the Nile 💅👑</h2>
+          <p><strong>cleopatra_queen</strong> caption description goes here.</p>
+          <div>
+            <button class="back-btn" onclick="closeModal()">Close</button>
+          </div>
+        </div>
+      </div>
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+    </div>
+
   </div>
 
   <script>
-    document.querySelector('.toggle-dark').onclick = () => {
-      document.body.classList.toggle('dark-mode');
-    };
-
-    function toggleLike(icon) {
-      if (icon.classList.contains('fas')) {
-        icon.classList.remove('fas');
-        icon.classList.add('far');
-      } else {
-        icon.classList.remove('far');
-        icon.classList.add('fas');
-        showNotification('Post liked! ❤️');
-      }
-    }
-
-    function postComment(e, input) {
-      if (e.key === 'Enter' && input.value.trim() !== '') {
-        const comment = document.createElement('div');
-        comment.textContent = input.value;
-        input.parentNode.querySelector('.comment-list').appendChild(comment);
-        input.value = '';
-      }
-    }
-
-    document.querySelectorAll('.follow-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.textContent = btn.textContent === 'Follow' ? 'Following' : 'Follow';
-        showNotification(btn.textContent === 'Following' ? 'You followed this user' : 'You unfollowed this user');
-      });
+    // Dark mode toggle
+    document.getElementById("darkModeToggle").addEventListener("click", function() {
+      document.body.classList.toggle("dark-mode");
     });
 
-    function showNotification(msg) {
-      const notify = document.getElementById('notifications');
-      notify.textContent = msg;
-      notify.style.display = 'block';
-      setTimeout(() => notify.style.display = 'none', 2000);
+    // Open modal
+    function openModal(postId) {
+      document.getElementById("imageModal").style.display = "flex";
     }
 
-    const searchBar = document.getElementById('search-bar');
-    searchBar.addEventListener('input', () => {
-      const query = searchBar.value.toLowerCase();
-      document.querySelectorAll('.post').forEach(post => {
-        const username = post.getAttribute('data-user');
-        post.style.display = username.includes(query) ? 'block' : 'none';
-      });
-    });
+    // Close modal
+    function closeModal() {
+      document.getElementById("imageModal").style.display = "none";
+    }
 
-    window.onscroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
-        const clone = document.querySelector('.post').cloneNode(true);
-        document.querySelector('.main-content').appendChild(clone);
-      }
-    };
+    // Navigate to profile page
+    function viewProfile(user) {
+      alert("Viewing profile of " + user);
+      // You can replace the alert with actual navigation to profile page
+    }
   </script>
+
 </body>
 </html>
