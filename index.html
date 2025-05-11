@@ -17,6 +17,8 @@
       display: flex;
       background-color: #fafafa;
       color: #262626;
+      flex-direction: column;
+      align-items: center;
     }
 
     .sidebar {
@@ -51,6 +53,8 @@
       width: 100%;
       max-width: 900px;
       padding: 30px 20px;
+      overflow-y: scroll;
+      height: 100vh;
     }
 
     .stories {
@@ -125,54 +129,50 @@
       margin-right: 5px;
     }
 
-    /* Modal Styles */
-    .modal {
+    /* Profile Page Styles */
+    .profile-page {
       display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .profile-header {
+      display: flex;
       justify-content: center;
       align-items: center;
+      margin-bottom: 20px;
     }
 
-    .modal-content {
-      display: flex;
-      background: white;
-      max-width: 900px;
-      width: 100%;
-      max-height: 80%;
+    .profile-header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-right: 20px;
     }
 
-    .modal-content img {
-      width: 50%;
-      height: auto;
+    .profile-info {
+      text-align: left;
     }
 
-    .modal-details {
-      width: 50%;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .modal-details h2 {
-      margin-bottom: 15px;
-    }
-
-    .modal-details p {
+    .profile-info h2 {
       margin-bottom: 10px;
     }
 
-    .close-modal {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 25px;
-      color: #fff;
-      cursor: pointer;
+    .profile-info p {
+      margin-bottom: 10px;
+    }
+
+    .profile-posts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .profile-posts img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
     }
 
     /* Back Button Styles */
@@ -190,28 +190,13 @@
     .back-btn:hover {
       background-color: #0056b3;
     }
-
-    /* Dark Mode */
-    .dark-mode {
-      background-color: #333;
-      color: #f0f0f0;
-    }
-
-    .dark-mode .sidebar {
-      background-color: #222;
-    }
-
-    .dark-mode .post {
-      background-color: #444;
-      color: #f0f0f0;
-    }
   </style>
 </head>
 <body>
 
   <div class="sidebar">
     <h1>Historygram</h1>
-    <a href="#"><i class="fas fa-home"></i>Home</a>
+    <a href="#" onclick="showHome()"><i class="fas fa-home"></i>Home</a>
     <a href="#"><i class="fas fa-search"></i>Search</a>
     <a href="#"><i class="fas fa-compass"></i>Explore</a>
     <a href="#"><i class="fas fa-video"></i>Reels</a>
@@ -219,7 +204,6 @@
     <a href="#"><i class="fas fa-bell"></i>Notifications</a>
     <a href="#"><i class="fas fa-plus-square"></i>Create</a>
     <a href="#"><i class="fas fa-user"></i>Profile</a>
-    <button id="darkModeToggle">🌙 Dark Mode</button>
   </div>
 
   <div class="main-content">
@@ -243,62 +227,78 @@
       </div>
     </div>
 
-    <!-- Post -->
-    <div class="post" onclick="openModal('post1')">
-      <div class="post-header">
-        <img src="https://picsum.photos/40?5" alt="">
-        <span><strong onclick="viewProfile('cleopatra_queen')">cleopatra_queen</strong></span>
-      </div>
-      <div class="post-image">
-        <img src="https://picsum.photos/600/400?5" alt="">
-      </div>
-      <div class="post-actions">
-        <i class="far fa-heart"></i>
-        <i class="far fa-comment"></i>
-        <i class="far fa-paper-plane"></i>
-      </div>
-      <div class="post-caption">
-        <strong>cleopatra_queen</strong> Ruling in style from the Nile 💅👑
-      </div>
-    </div>
-
-    <!-- Modal for image view -->
-    <div id="imageModal" class="modal">
-      <div class="modal-content">
-        <img src="https://picsum.photos/600/400?5" alt="">
-        <div class="modal-details">
-          <h2>Ruling in style from the Nile 💅👑</h2>
-          <p><strong>cleopatra_queen</strong> caption description goes here.</p>
-          <div>
-            <button class="back-btn" onclick="closeModal()">Close</button>
-          </div>
+    <!-- Posts -->
+    <div id="postsContainer">
+      <div class="post" onclick="openModal('post1')">
+        <div class="post-header">
+          <img src="https://picsum.photos/40?5" alt="">
+          <span><strong onclick="viewProfile('cleopatra_queen')">cleopatra_queen</strong></span>
+        </div>
+        <div class="post-image">
+          <img src="https://picsum.photos/600/400?5" alt="">
+        </div>
+        <div class="post-actions">
+          <i class="far fa-heart"></i>
+          <i class="far fa-comment"></i>
+          <i class="far fa-paper-plane"></i>
+        </div>
+        <div class="post-caption">
+          <strong>cleopatra_queen</strong> Ruling in style from the Nile 💅👑
         </div>
       </div>
-      <span class="close-modal" onclick="closeModal()">&times;</span>
+
+      <!-- Add more posts here -->
     </div>
 
+    <!-- Profile Page -->
+    <div id="profilePage" class="profile-page">
+      <div class="profile-header">
+        <img src="https://picsum.photos/100?1" alt="">
+        <div class="profile-info">
+          <h2>Cleopatra</h2>
+          <p><strong>Followers:</strong> 1.2M</p>
+          <p><strong>Following:</strong> 60</p>
+          <p><strong>Posts:</strong> 1,236</p>
+        </div>
+      </div>
+
+      <div class="profile-posts">
+        <img src="https://picsum.photos/150/150?1" alt="">
+        <img src="https://picsum.photos/150/150?2" alt="">
+        <img src="https://picsum.photos/150/150?3" alt="">
+        <img src="https://picsum.photos/150/150?4" alt="">
+      </div>
+
+      <button class="back-btn" onclick="showHome()">Back to Home</button>
+    </div>
   </div>
 
   <script>
-    // Dark mode toggle
-    document.getElementById("darkModeToggle").addEventListener("click", function() {
-      document.body.classList.toggle("dark-mode");
-    });
+    // Show home page (posts feed)
+    function showHome() {
+      document.getElementById("profilePage").style.display = "none";
+      document.getElementById("postsContainer").style.display = "block";
+    }
 
-    // Open modal
+    // View profile page
+    function viewProfile(profile) {
+      // Show the profile page and hide the main feed
+      document.getElementById("postsContainer").style.display = "none";
+      document.getElementById("profilePage").style.display = "block";
+      // Here you can change the profile info dynamically (currently set to Cleopatra)
+      if (profile === "Cleopatra") {
+        document.querySelector(".profile-header img").src = "https://picsum.photos/100?1";
+        document.querySelector(".profile-info h2").innerText = "Cleopatra";
+        document.querySelector(".profile-info p:nth-child(2)").innerText = "Followers: 1.2M";
+        document.querySelector(".profile-info p:nth-child(3)").innerText = "Following: 60";
+        document.querySelector(".profile-info p:nth-child(4)").innerText = "Posts: 1,236";
+      }
+      // Add other profiles here...
+    }
+
+    // Open modal for post
     function openModal(postId) {
-      document.getElementById("imageModal").style.display = "flex";
-    }
-
-    // Close modal
-    function closeModal() {
-      document.getElementById("imageModal").style.display = "none";
-    }
-
-    // Navigate to profile page
-    function viewProfile(user) {
-      alert("Viewing profile of " + user);
-      // You can replace the alert with actual navigation to profile page
+      alert('You clicked on post ' + postId);
     }
   </script>
 
